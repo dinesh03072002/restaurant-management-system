@@ -1,25 +1,22 @@
+// backend/src/config/database.js
 const { Sequelize } = require('sequelize');
-const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../../.env') });
-
-
+require('dotenv').config();
 
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'restaurant_db',
-  process.env.DB_USER || 'root',
-  process.env.DB_PASSWORD || '',
+  process.env.DB_USER || 'avnadmin',
+  process.env.DB_PASSWORD,
   {
-    host: process.env.DB_HOST || 'localhost',
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 3306,
     dialect: 'mysql',
     logging: false,
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
+    dialectOptions: {
+      ssl: {
+        rejectUnauthorized: false 
+      }
     }
   }
 );
-
 
 module.exports = sequelize;
