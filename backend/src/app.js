@@ -34,6 +34,10 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Server is running' });
 });
 
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong'); 
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ 

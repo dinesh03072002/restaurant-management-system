@@ -5,6 +5,7 @@ import MenuList from './components/Menu/MenuList';
 import CreateOrder from './components/Orders/CreateOrder';
 import OrderList from './components/Orders/OrderList';
 import Dashboard from './components/Dashboard/Dashboard';
+import './services/keepAlive';
 import './index.css';
 
 function App() {
