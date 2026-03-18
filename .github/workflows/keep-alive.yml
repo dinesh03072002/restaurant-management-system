@@ -1,0 +1,47 @@
+name: Keep Render Backend Alive
+
+on:
+  schedule:
+    # Runs every 10 minutes - adjust based on your needs
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  ping-backend:
+    name: Ping Backend to Prevent Sleep
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check if backend is alive
+        run: |
+          echo "Pinging backend at $(date)"
+          
+      - name: Ping Health Endpoint
+        run: |
+          curl -I https://restaurant-management-system-backend-f8wj.onrender.com/health \
+            --max-time 10 \
+            --retry 3 \
+            --retry-delay 5 \
+            --retry-max-time 30 \
+            --fail
+        continue-on-error: true
+      
+      - name: Ping Dashboard API (to keep data warm)
+        run: |
+          curl -I https://restaurant-management-system-backend-f8wj.onrender.com/api/dashboard/daily-summary \
+            --max-time 15 \
+            --retry 3 \
+            --retry-delay 5
+        continue-on-error: true
+      
+      - name: Ping Menu API (to cache menu data)
+        run: |
+          curl -I https://restaurant-management-system-backend-f8wj.onrender.com/api/menu \
+            --max-time 15 \
+            --retry 3 \
+            --retry-delay 5
+        continue-on-error: true
+      
+      - name: Log ping result
+        run: |
+          echo "✅ Ping completed at $(date)"
