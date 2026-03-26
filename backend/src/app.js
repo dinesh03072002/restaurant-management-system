@@ -61,17 +61,15 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Database connection and server start
+
 const PORT = process.env.PORT || 5000;
 
-sequelize.sync()
+sequelize.authenticate()
   .then(() => {
-    console.log('✅ Database connected and synced successfully');
-    console.log('📦 Tables created/updated: Menu, Orders, OrderItems');
-    
+    console.log('✅ Database connected successfully');
+
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
-      
     });
   })
   .catch(err => {
